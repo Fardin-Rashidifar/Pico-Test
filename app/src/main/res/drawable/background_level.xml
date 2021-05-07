@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<clip xmlns:android="http://schemas.android.com/apk/res/android"
+    android:clipOrientation="vertical"
+    android:drawable="@drawable/background_shape"
+    android:gravity="bottom|clip_vertical|fill_horizontal" >
+
+    <color android:color="#FD9999"/>
+
+</clip>
