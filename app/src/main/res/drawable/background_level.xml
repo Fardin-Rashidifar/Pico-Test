@@ -4,6 +4,6 @@
     android:drawable="@drawable/background_shape"
     android:gravity="bottom|clip_vertical|fill_horizontal" >
 
-    <color android:color="#FD9999"/>
+    <color android:color="@android:color/holo_green_light"/>
 
 </clip>
