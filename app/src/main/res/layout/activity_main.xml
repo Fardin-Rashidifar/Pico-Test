@@ -8,17 +8,30 @@
     tools:context=".view.activity.MainActivity">
 
  <TextView
-     android:id="@+id/tvStartGame"
+     android:id="@+id/tvStartGameAnimal"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
-     android:text="شروع بازی"
+     android:text="شروع بازی حیوانات"
      android:padding="30dp"
      android:background="@drawable/bg_btn_start_game"
-     android:textSize="24sp"
+     android:textSize="18sp"
      android:textColor="@color/white"
      app:layout_constraintEnd_toEndOf="parent"
      app:layout_constraintStart_toStartOf="parent"
      app:layout_constraintTop_toTopOf="parent"
      app:layout_constraintBottom_toBottomOf="parent" />
+ <TextView
+     android:id="@+id/tvStartGameFlowers"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:text="شروع بازی گل ها"
+     android:padding="30dp"
+     android:layout_marginTop="20dp"
+     android:background="@drawable/bg_btn_start_game"
+     android:textSize="18sp"
+     android:textColor="@color/white"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/tvStartGameAnimal" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

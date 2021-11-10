@@ -4,15 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.view.size
@@ -21,14 +19,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import me.fered.picotest.R
 import me.fered.picotest.dataClass.Picture
+import me.fered.picotest.databinding.ActivityFlowerBinding
 import me.fered.picotest.databinding.ActivityGameBinding
 import me.fered.picotest.ext.SetOnClickCustomDialogWinner
 import me.fered.picotest.helper.CustomDialogWinRound
 import me.fered.picotest.view.adapter.PictureAdapter
 
-class GameActivity : AppCompatActivity() {
+class FlowerActivity : AppCompatActivity() {
 
-    private lateinit var activityMainBinding: ActivityGameBinding
+    private lateinit var activityMainBinding: ActivityFlowerBinding
     private lateinit var pictureAdapter: PictureAdapter
     private lateinit var pictureRecyclerView: RecyclerView
     private var pictureListShuffled: MutableList<Picture> = ArrayList()
@@ -46,7 +45,7 @@ class GameActivity : AppCompatActivity() {
         private var allCards: Int = 8
 
         fun startGameActivity(context: Context) {
-            val intent = Intent(context, GameActivity::class.java)
+            val intent = Intent(context, FlowerActivity::class.java)
             context.startActivity(intent)
             (context as Activity).overridePendingTransition(
                 R.anim.slide_in_right,
@@ -58,7 +57,7 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         updateStatusBarColorTransparent()
-        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_game)
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_flower)
 
         initGame()
         startGame()
@@ -101,27 +100,27 @@ class GameActivity : AppCompatActivity() {
         pictureRecyclerView.layoutManager = GridLayoutManager(this, 4)
         pictureRecyclerView.adapter = pictureAdapter
 
-        pictureList.add(Picture(1, ContextCompat.getDrawable(this, R.drawable.girafa), 1, false))
-        pictureList.add(Picture(2, ContextCompat.getDrawable(this, R.drawable.girafa), 1, false))
-        pictureList.add(Picture(3, ContextCompat.getDrawable(this, R.drawable.leao), 2, false))
-        pictureList.add(Picture(4, ContextCompat.getDrawable(this, R.drawable.leao), 2, false))
-        pictureList.add(Picture(5, ContextCompat.getDrawable(this, R.drawable.macaco), 3, false))
-        pictureList.add(Picture(6, ContextCompat.getDrawable(this, R.drawable.macaco), 3, false))
-        pictureList.add(Picture(7, ContextCompat.getDrawable(this, R.drawable.pato), 4, false))
-        pictureList.add(Picture(8, ContextCompat.getDrawable(this, R.drawable.pato), 4, false))
-        pictureList.add(Picture(9, ContextCompat.getDrawable(this, R.drawable.tigre), 5, false))
-        pictureList.add(Picture(10, ContextCompat.getDrawable(this, R.drawable.tigre), 5, false))
-        pictureList.add(Picture(11, ContextCompat.getDrawable(this, R.drawable.touro), 6, false))
-        pictureList.add(Picture(12, ContextCompat.getDrawable(this, R.drawable.touro), 6, false))
-        pictureList.add(Picture(13, ContextCompat.getDrawable(this, R.drawable.gato), 7, false))
-        pictureList.add(Picture(14, ContextCompat.getDrawable(this, R.drawable.gato), 7, false))
-        pictureList.add(Picture(15, ContextCompat.getDrawable(this, R.drawable.rato), 8, false))
-        pictureList.add(Picture(16, ContextCompat.getDrawable(this, R.drawable.rato), 8, false))
+        pictureList.add(Picture(1, ContextCompat.getDrawable(this, R.drawable.flower_acicularis), 1, false))
+        pictureList.add(Picture(2, ContextCompat.getDrawable(this, R.drawable.flower_acicularis), 1, false))
+        pictureList.add(Picture(3, ContextCompat.getDrawable(this, R.drawable.flower_arad_rose), 2, false))
+        pictureList.add(Picture(4, ContextCompat.getDrawable(this, R.drawable.flower_arad_rose), 2, false))
+        pictureList.add(Picture(5, ContextCompat.getDrawable(this, R.drawable.flower_arvense), 3, false))
+        pictureList.add(Picture(6, ContextCompat.getDrawable(this, R.drawable.flower_arvense), 3, false))
+        pictureList.add(Picture(7, ContextCompat.getDrawable(this, R.drawable.flower_boreale), 4, false))
+        pictureList.add(Picture(8, ContextCompat.getDrawable(this, R.drawable.flower_boreale), 4, false))
+        pictureList.add(Picture(9, ContextCompat.getDrawable(this, R.drawable.flower_capensis), 5, false))
+        pictureList.add(Picture(10, ContextCompat.getDrawable(this, R.drawable.flower_capensis), 5, false))
+        pictureList.add(Picture(11, ContextCompat.getDrawable(this, R.drawable.flower_dahlia), 6, false))
+        pictureList.add(Picture(12, ContextCompat.getDrawable(this, R.drawable.flower_dahlia), 6, false))
+        pictureList.add(Picture(13, ContextCompat.getDrawable(this, R.drawable.flower_dandelion), 7, false))
+        pictureList.add(Picture(14, ContextCompat.getDrawable(this, R.drawable.flower_dandelion), 7, false))
+        pictureList.add(Picture(15, ContextCompat.getDrawable(this, R.drawable.flower_illust), 8, false))
+        pictureList.add(Picture(16, ContextCompat.getDrawable(this, R.drawable.flower_illust), 8, false))
         if (whichStep >= 1) {
             pictureList.add(
                 Picture(
                     17,
-                    ContextCompat.getDrawable(this, R.drawable.cartoon_monkey),
+                    ContextCompat.getDrawable(this, R.drawable.flower_pink_rose),
                     9,
                     false
                 )
@@ -129,7 +128,7 @@ class GameActivity : AppCompatActivity() {
             pictureList.add(
                 Picture(
                     18,
-                    ContextCompat.getDrawable(this, R.drawable.cartoon_monkey),
+                    ContextCompat.getDrawable(this, R.drawable.flower_pink_rose),
                     9,
                     false
                 )
@@ -138,7 +137,7 @@ class GameActivity : AppCompatActivity() {
             pictureList.add(
                 Picture(
                     19,
-                    ContextCompat.getDrawable(this, R.drawable.monkey),
+                    ContextCompat.getDrawable(this, R.drawable.flower_piperi),
                     10,
                     false
                 )
@@ -146,7 +145,7 @@ class GameActivity : AppCompatActivity() {
             pictureList.add(
                 Picture(
                     20,
-                    ContextCompat.getDrawable(this, R.drawable.monkey),
+                    ContextCompat.getDrawable(this, R.drawable.flower_piperi),
                     10,
                     false
                 )
@@ -157,7 +156,7 @@ class GameActivity : AppCompatActivity() {
             pictureList.add(
                 Picture(
                     21,
-                    ContextCompat.getDrawable(this, R.drawable.cat),
+                    ContextCompat.getDrawable(this, R.drawable.flower_red_rose),
                     11,
                     false
                 )
@@ -165,7 +164,7 @@ class GameActivity : AppCompatActivity() {
             pictureList.add(
                 Picture(
                     22,
-                    ContextCompat.getDrawable(this, R.drawable.cat),
+                    ContextCompat.getDrawable(this, R.drawable.flower_red_rose),
                     11,
                     false
                 )
@@ -174,7 +173,7 @@ class GameActivity : AppCompatActivity() {
             pictureList.add(
                 Picture(
                     23,
-                    ContextCompat.getDrawable(this, R.drawable.elephant),
+                    ContextCompat.getDrawable(this, R.drawable.flower_rose),
                     12,
                     false
                 )
@@ -182,7 +181,7 @@ class GameActivity : AppCompatActivity() {
             pictureList.add(
                 Picture(
                     24,
-                    ContextCompat.getDrawable(this, R.drawable.elephant),
+                    ContextCompat.getDrawable(this, R.drawable.flower_rose),
                     12,
                     false
                 )
@@ -194,7 +193,7 @@ class GameActivity : AppCompatActivity() {
             pictureList.add(
                 Picture(
                     25,
-                    ContextCompat.getDrawable(this, R.drawable.owl),
+                    ContextCompat.getDrawable(this, R.drawable.flower_tulo),
                     13,
                     false
                 )
@@ -202,7 +201,7 @@ class GameActivity : AppCompatActivity() {
             pictureList.add(
                 Picture(
                     26,
-                    ContextCompat.getDrawable(this, R.drawable.owl),
+                    ContextCompat.getDrawable(this, R.drawable.flower_tulo),
                     13,
                     false
                 )
@@ -211,7 +210,7 @@ class GameActivity : AppCompatActivity() {
             pictureList.add(
                 Picture(
                     27,
-                    ContextCompat.getDrawable(this, R.drawable.bear),
+                    ContextCompat.getDrawable(this, R.drawable.flower_glabella),
                     14,
                     false
                 )
@@ -219,7 +218,7 @@ class GameActivity : AppCompatActivity() {
             pictureList.add(
                 Picture(
                     28,
-                    ContextCompat.getDrawable(this, R.drawable.bear),
+                    ContextCompat.getDrawable(this, R.drawable.flower_glabella),
                     14,
                     false
                 )
@@ -299,7 +298,7 @@ class GameActivity : AppCompatActivity() {
         }
 
 //        handler.removeCallbacksAndMessages(null)
-        activityMainBinding.restartGameButton.visibility = VISIBLE
+        activityMainBinding.restartGameButton.visibility = View.VISIBLE
     }
 
     private fun restartGame() {
@@ -311,7 +310,7 @@ class GameActivity : AppCompatActivity() {
         for (i in 0 until pictureRecyclerView.size) {
             pictureRecyclerView[i].isEnabled = true
         }
-        activityMainBinding.restartGameButton.visibility = INVISIBLE
+        activityMainBinding.restartGameButton.visibility = View.INVISIBLE
         activityMainBinding.moreTimeButton.isEnabled = true
         activityMainBinding.showCardButton.isEnabled = true
         initGame()
