@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:ignore="MissingDefaultResource">
@@ -25,10 +26,10 @@
 
             <ImageView
                 android:id="@+id/imgTopImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_round_info_red"
+                android:src="@drawable/three_stars_image"
                 android:layout_marginTop="12dp"
                 tools:ignore="ContentDescription" />
 
@@ -39,41 +40,63 @@
                 android:layout_marginTop="18dp"
                 android:padding="10dp"
                 android:gravity="center"
+                android:fontFamily="@font/samim"
                 android:textAlignment="gravity"
-                android:text="@string/decima360OnlyWorksCorrectly"
+                android:layout_gravity="center"
+                android:text="تبریک شما برنده شدید"
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
 
-            <TextView
-                android:id="@+id/tvMiddleText"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/lato_regular"
-                android:textSize="12sp"
-                android:text="@string/thisAppCollectsLocationDataToEnable"
-                android:textAlignment="gravity"
-                android:gravity="center"
-                android:textColor="@color/black" />
+                >
 
-            <Button
-                android:id="@+id/btnOk"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_gravity="center"
-                android:padding="5dp"
-                android:textAllCaps="false"
-                android:background="@drawable/bg_default_text_button"
-                android:text="@string/ok"
-                android:translationZ="25dp"
-                android:textSize="18sp"
-                android:textColor="@android:color/white" />
+                <Button
+                    android:id="@+id/btnRestartRound"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/green_border"
+                    android:fontFamily="@font/samim"
+                    android:padding="5dp"
+                    android:text="شروع مجدد"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:translationZ="25dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <Button
+                    android:id="@+id/btnNextRound"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center"
+                    android:layout_margin="8dp"
+
+                    android:background="@drawable/green_border"
+                    android:fontFamily="@font/samim"
+                    android:padding="5dp"
+                    android:text="مرحله بعد"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:translationZ="25dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

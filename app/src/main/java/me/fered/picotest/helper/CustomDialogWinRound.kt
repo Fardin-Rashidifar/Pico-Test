@@ -1,35 +1,46 @@
 package me.fered.picotest.helper
 
-import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
 import android.view.Window
-import android.widget.Button
-import android.widget.TextView
-import f.r.geofamilymvvm.R
-import f.r.geofamilymvvm.ext.SetDataStatus
-import javax.inject.Inject
+import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil
+import me.fered.picotest.R
+import me.fered.picotest.databinding.LayoutCustomDialogWinRoundBinding
+import me.fered.picotest.ext.SetOnClickCustomDialogWinner
 
-class CustomDialogWinRound @Inject constructor(){
-    private lateinit var dialog: Dialog
 
-    fun showAlertDialog(context: Context,setDataStatus: SetDataStatus,textBtnBottom: String,textTopTv: String,textMiddleTv: String) {
-        dialog = Dialog(context)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.layout_custom_dialog_location_permission)
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val btnOk = dialog.findViewById<Button>(R.id.btnOk)
-        val tvMiddle = dialog.findViewById<TextView>(R.id.tvMiddleText)
-        val tvTop = dialog.findViewById<TextView>(R.id.tvTopText)
-        btnOk.text = textBtnBottom
-        tvMiddle.text = textMiddleTv
-        tvTop.text = textTopTv
-        btnOk.setOnClickListener {
-            setDataStatus.isDataCome(true)
-            dialog.dismiss()
+class CustomDialogWinRound(context: Context) : AlertDialog(context), View.OnClickListener {
+    private lateinit var setOnClickCustomDialogWinner: SetOnClickCustomDialogWinner
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        super.onCreate(savedInstanceState)
+        val binding: LayoutCustomDialogWinRoundBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(
+                context
+            ), R.layout.layout_custom_dialog_win_round, null, false
+        )
+        setContentView(binding.root)
+        binding.btnNextRound.setOnClickListener(this)
+        binding.btnRestartRound.setOnClickListener(this)
+    }
+
+    fun setOnClickCustomDialog(onClickCustomDialogWinner: SetOnClickCustomDialogWinner){
+        this.setOnClickCustomDialogWinner = onClickCustomDialogWinner
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.btnNextRound ->{
+                this.setOnClickCustomDialogWinner.onNext()
+            }
+            R.id.btnRestartRound ->{
+                this.setOnClickCustomDialogWinner.onRestart()
+            }
+
         }
-        dialog.show()
     }
 }

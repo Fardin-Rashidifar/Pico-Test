@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -18,10 +19,12 @@ import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import me.fered.picotest.dataClass.Picture
-import me.fered.picotest.view.adapter.PictureAdapter
 import me.fered.picotest.R
+import me.fered.picotest.dataClass.Picture
 import me.fered.picotest.databinding.ActivityGameBinding
+import me.fered.picotest.ext.SetOnClickCustomDialogWinner
+import me.fered.picotest.helper.CustomDialogWinRound
+import me.fered.picotest.view.adapter.PictureAdapter
 
 class GameActivity : AppCompatActivity() {
 
@@ -31,16 +34,25 @@ class GameActivity : AppCompatActivity() {
     private var pictureListShuffled: MutableList<Picture> = ArrayList()
     private var pictureList: MutableList<Picture> = ArrayList()
     private var backgroundLevelStep: Int = BACKGROUND_MAX_LEVEL / (TIME * 20)
+    lateinit var customDialogWinRound: CustomDialogWinRound
+    lateinit var runnable: Runnable
+    lateinit var handler: Handler
 
-     companion object {
+    companion object {
         private const val TIME: Int = 30
         private const val BACKGROUND_MAX_LEVEL = 10000
+        private var isSolved: Boolean = false
+        private var whichStep: Int = 0
+        private var allCards: Int = 8
 
-         fun startGameActivity(context: Context) {
-             val intent = Intent(context, GameActivity::class.java)
-             context.startActivity(intent)
-             (context as Activity).overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left)
-         }
+        fun startGameActivity(context: Context) {
+            val intent = Intent(context, GameActivity::class.java)
+            context.startActivity(intent)
+            (context as Activity).overridePendingTransition(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left
+            )
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +97,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun initGame() {
         pictureRecyclerView = activityMainBinding.pictureRecyclerView
-        pictureAdapter = PictureAdapter(pictureListShuffled)
+        pictureAdapter = PictureAdapter(pictureListShuffled,this)
         pictureRecyclerView.layoutManager = GridLayoutManager(this, 4)
         pictureRecyclerView.adapter = pictureAdapter
 
@@ -105,6 +117,115 @@ class GameActivity : AppCompatActivity() {
         pictureList.add(Picture(14, ContextCompat.getDrawable(this, R.drawable.gato), 7, false))
         pictureList.add(Picture(15, ContextCompat.getDrawable(this, R.drawable.rato), 8, false))
         pictureList.add(Picture(16, ContextCompat.getDrawable(this, R.drawable.rato), 8, false))
+        if (whichStep >= 1) {
+            pictureList.add(
+                Picture(
+                    17,
+                    ContextCompat.getDrawable(this, R.drawable.cartoon_monkey),
+                    9,
+                    false
+                )
+            )
+            pictureList.add(
+                Picture(
+                    18,
+                    ContextCompat.getDrawable(this, R.drawable.cartoon_monkey),
+                    9,
+                    false
+                )
+            )
+
+            pictureList.add(
+                Picture(
+                    19,
+                    ContextCompat.getDrawable(this, R.drawable.monkey),
+                    10,
+                    false
+                )
+            )
+            pictureList.add(
+                Picture(
+                    20,
+                    ContextCompat.getDrawable(this, R.drawable.monkey),
+                    10,
+                    false
+                )
+            )
+
+        }
+        if (whichStep >= 2) {
+            pictureList.add(
+                Picture(
+                    21,
+                    ContextCompat.getDrawable(this, R.drawable.cat),
+                    11,
+                    false
+                )
+            )
+            pictureList.add(
+                Picture(
+                    22,
+                    ContextCompat.getDrawable(this, R.drawable.cat),
+                    11,
+                    false
+                )
+            )
+
+            pictureList.add(
+                Picture(
+                    23,
+                    ContextCompat.getDrawable(this, R.drawable.elephant),
+                    12,
+                    false
+                )
+            )
+            pictureList.add(
+                Picture(
+                    24,
+                    ContextCompat.getDrawable(this, R.drawable.elephant),
+                    12,
+                    false
+                )
+            )
+
+        }
+
+        if (whichStep >= 3) {
+            pictureList.add(
+                Picture(
+                    25,
+                    ContextCompat.getDrawable(this, R.drawable.owl),
+                    13,
+                    false
+                )
+            )
+            pictureList.add(
+                Picture(
+                    26,
+                    ContextCompat.getDrawable(this, R.drawable.owl),
+                    13,
+                    false
+                )
+            )
+
+            pictureList.add(
+                Picture(
+                    27,
+                    ContextCompat.getDrawable(this, R.drawable.bear),
+                    14,
+                    false
+                )
+            )
+            pictureList.add(
+                Picture(
+                    28,
+                    ContextCompat.getDrawable(this, R.drawable.bear),
+                    14,
+                    false
+                )
+            )
+
+        }
 
         pictureListShuffled.addAll(pictureList)
         pictureListShuffled.shuffle()
@@ -116,21 +237,26 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun startGame() {
-        val handler = Handler(Looper.getMainLooper())
-        val runnable: Runnable = object : Runnable {
+        handler = Handler(Looper.getMainLooper())
+        runnable = object : Runnable {
             override fun run() {
-                when {
-                    pictureAdapter.getSolvedCount() == 8 -> {
-                        finishGame(1)
-                    }
-                    activityMainBinding.parentLayout.background.level >= BACKGROUND_MAX_LEVEL -> {
-                        finishGame(0)
-                    }
-                    else -> {
-                        activityMainBinding.parentLayout.background.level += backgroundLevelStep
-                        activityMainBinding.timeTextView.text = (TIME - (activityMainBinding.parentLayout.background.level / (BACKGROUND_MAX_LEVEL / TIME))).toString()
+                if (!isSolved) {
+                    when {
+                        pictureAdapter.getSolvedCount() == allCards -> {
+                            finishGame(1)
+                            isSolved = true
+                        }
+                        activityMainBinding.parentLayout.background.level >= BACKGROUND_MAX_LEVEL -> {
+                            finishGame(0)
+                        }
+                        else -> {
+                            activityMainBinding.parentLayout.background.level += backgroundLevelStep
+                            activityMainBinding.timeTextView.text =
+                                (TIME - (activityMainBinding.parentLayout.background.level / (BACKGROUND_MAX_LEVEL / TIME))).toString()
+                        }
                     }
                 }
+
                 handler.postDelayed(this, 50)
             }
         }
@@ -140,7 +266,27 @@ class GameActivity : AppCompatActivity() {
     private fun finishGame(status: Int) {
         when (status) {
             1 -> {
-                activityMainBinding.timeTextView.text = "تبریک شما برنده شدید"
+                Log.d("omade", "finishGame: ")
+                // activityMainBinding.timeTextView.text = "تبریک شما برنده شدید"
+                customDialogWinRound = CustomDialogWinRound(this)
+                customDialogWinRound.show()
+                customDialogWinRound.setCancelable(false)
+                customDialogWinRound.setCanceledOnTouchOutside(false)
+                customDialogWinRound.setOnClickCustomDialog(object : SetOnClickCustomDialogWinner {
+                    override fun onRestart() {
+                        allCards = 8
+                        whichStep = 0
+                        restartGame()
+                        customDialogWinRound.dismiss()
+                    }
+
+                    override fun onNext() {
+                        allCards += 2
+                        whichStep += 1
+                        restartGame()
+                        customDialogWinRound.dismiss()
+                    }
+                })
             }
             0 -> {
                 activityMainBinding.timeTextView.text = "متاسفانه وقت شما به پایان رسید"
@@ -157,6 +303,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun restartGame() {
+        isSolved = false
         activityMainBinding.parentLayout.background.level = 0
         pictureAdapter.setSolvedCount(0)
         pictureList.clear()
@@ -172,7 +319,7 @@ class GameActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        this.overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right)
+        this.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
     }
 
     fun updateStatusBarColorTransparent() {

@@ -1,5 +1,6 @@
 package me.fered.picotest.view.adapter
 
+import android.app.Activity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +15,7 @@ import me.fered.picotest.databinding.ItemPictureBinding
 import java.util.*
 
 
-class PictureAdapter(private var pictureList: List<Picture>) : RecyclerView.Adapter<PictureAdapter.CustomHolder>() {
+class PictureAdapter(private var pictureList: List<Picture> , val activity: Activity) : RecyclerView.Adapter<PictureAdapter.CustomHolder>() {
 
     companion object {
         var LAST_CHOICE: Picture? = null
@@ -31,7 +32,7 @@ class PictureAdapter(private var pictureList: List<Picture>) : RecyclerView.Adap
         val itemPictureBinding = DataBindingUtil.inflate<ItemPictureBinding>(layoutInflater,
             R.layout.item_picture, parent, false)
 
-        return CustomHolder(itemPictureBinding, itemPictureBinding.root)
+        return CustomHolder(itemPictureBinding, itemPictureBinding.root,activity)
     }
 
     override fun onBindViewHolder(holder: CustomHolder, position: Int) {
@@ -51,7 +52,8 @@ class PictureAdapter(private var pictureList: List<Picture>) : RecyclerView.Adap
         SOLVED_COUNT = count
     }
 
-    class CustomHolder(private val itemPictureBinding: ItemPictureBinding, itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class CustomHolder(private val itemPictureBinding: ItemPictureBinding, itemView: View,
+                       private val activity: Activity) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(picture: Picture, pictureList: List<Picture>) {
             this.itemPictureBinding.executePendingBindings()
@@ -82,13 +84,18 @@ class PictureAdapter(private var pictureList: List<Picture>) : RecyclerView.Adap
 
                                 Timer().schedule(object : TimerTask() {
                                     override fun run() {
-                                        LAST_CHOICE_ITEM_VIEW!!.setImageDrawable(ContextCompat.getDrawable(itemView.context,
-                                            R.drawable.pattern
-                                        ))
-                                        itemPictureBinding.imageView.setImageDrawable(ContextCompat.getDrawable(itemView.context,
-                                            R.drawable.pattern
-                                        ))
-                                        STOP = false
+                                        activity.runOnUiThread(object : Runnable{
+                                            override fun run() {
+                                                LAST_CHOICE_ITEM_VIEW!!.setImageDrawable(ContextCompat.getDrawable(itemView.context,
+                                                    R.drawable.pattern
+                                                ))
+                                                itemPictureBinding.imageView.setImageDrawable(ContextCompat.getDrawable(itemView.context,
+                                                    R.drawable.pattern
+                                                ))
+                                                STOP = false
+                                            }
+                                        })
+
                                     }
                                 }, 500)
                             }
