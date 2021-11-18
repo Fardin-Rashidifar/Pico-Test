@@ -38,11 +38,12 @@ class FlowerActivity : AppCompatActivity() {
     lateinit var handler: Handler
 
     companion object {
-        private const val TIME: Int = 30
+        private var TIME: Int = 30
         private const val BACKGROUND_MAX_LEVEL = 10000
         private var isSolved: Boolean = false
         private var whichStep: Int = 0
         private var allCards: Int = 8
+        private var active = false
 
         fun startGameActivity(context: Context) {
             val intent = Intent(context, FlowerActivity::class.java)
@@ -268,13 +269,21 @@ class FlowerActivity : AppCompatActivity() {
                 Log.d("omade", "finishGame: ")
                 // activityMainBinding.timeTextView.text = "تبریک شما برنده شدید"
                 customDialogWinRound = CustomDialogWinRound(this)
-                customDialogWinRound.show()
+                if (active){
+                    customDialogWinRound.show()
+                }
                 customDialogWinRound.setCancelable(false)
                 customDialogWinRound.setCanceledOnTouchOutside(false)
+                if (whichStep + 1 == 4){
+                    customDialogWinRound.setBtnNextVisibility(false)
+                }else{
+                    customDialogWinRound.setBtnNextVisibility(true)
+                }
                 customDialogWinRound.setOnClickCustomDialog(object : SetOnClickCustomDialogWinner {
                     override fun onRestart() {
                         allCards = 8
                         whichStep = 0
+                        TIME = 30
                         restartGame()
                         customDialogWinRound.dismiss()
                     }
@@ -282,6 +291,7 @@ class FlowerActivity : AppCompatActivity() {
                     override fun onNext() {
                         allCards += 2
                         whichStep += 1
+                        TIME += 10
                         restartGame()
                         customDialogWinRound.dismiss()
                     }
@@ -327,5 +337,13 @@ class FlowerActivity : AppCompatActivity() {
         window.statusBarColor = Color.TRANSPARENT
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
     }
+    override fun onStart() {
+        super.onStart()
+        active = true
+    }
 
+    override fun onStop() {
+        super.onStop()
+        active = false
+    }
 }

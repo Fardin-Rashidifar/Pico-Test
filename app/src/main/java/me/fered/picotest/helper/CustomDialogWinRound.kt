@@ -14,11 +14,12 @@ import me.fered.picotest.ext.SetOnClickCustomDialogWinner
 
 class CustomDialogWinRound(context: Context) : AlertDialog(context), View.OnClickListener {
     private lateinit var setOnClickCustomDialogWinner: SetOnClickCustomDialogWinner
+    lateinit var binding: LayoutCustomDialogWinRoundBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
-        val binding: LayoutCustomDialogWinRoundBinding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
             LayoutInflater.from(
                 context
             ), R.layout.layout_custom_dialog_win_round, null, false
@@ -26,6 +27,13 @@ class CustomDialogWinRound(context: Context) : AlertDialog(context), View.OnClic
         setContentView(binding.root)
         binding.btnNextRound.setOnClickListener(this)
         binding.btnRestartRound.setOnClickListener(this)
+    }
+    fun setBtnNextVisibility(visible:Boolean){
+        if (visible){
+            binding.btnNextRound.visibility = View.VISIBLE
+        }else{
+            binding.btnNextRound.visibility = View.INVISIBLE
+        }
     }
 
     fun setOnClickCustomDialog(onClickCustomDialogWinner: SetOnClickCustomDialogWinner){
